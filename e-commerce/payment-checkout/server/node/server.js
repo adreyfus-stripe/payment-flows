@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const { resolve } = require("path");
-const envPath = resolve("../../../.env");
+const envPath = resolve("../../.env");
 const env = require("dotenv").config({ path: envPath });
 const stripe = require("stripe")(env.parsed.STRIPE_SECRET_KEY);
 
