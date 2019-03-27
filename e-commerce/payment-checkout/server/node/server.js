@@ -1,17 +1,16 @@
 const express = require("express");
 const app = express();
 const { resolve } = require("path");
-const envPath = resolve("../../.env");
+const envPath = resolve(".env");
 const env = require("dotenv").config({ path: envPath });
+
 const stripe = require("stripe")(env.parsed.STRIPE_SECRET_KEY);
 
-app.use(express.static("../../client"));
+app.use(express.static("./client"));
 app.use(
   express.json({
     verify: function(req, res, buf) {
-      console.log("here", );
       if (req.originalUrl.startsWith("/webhook")) {
-        console.log("buffer", buf);
         req.rawBody = buf.toString();
       }
     }
@@ -20,7 +19,7 @@ app.use(
 
 // Deliver checkout page
 app.get("/", function(request, response) {
-  const path = resolve("../../client/index.html");
+  const path = resolve("./client/index.html");
   response.sendFile(path);
 });
 
@@ -30,8 +29,8 @@ app.post("/create-session", async (req, res) => {
     // What does cancel url mean?
     // Can we have metadata here?
     {
-      success_url: "http://0dfad549.ngrok.io/success",
-      cancel_url: "http://0dfad549.ngrok.io/cancel",
+      success_url: `${env.parsed.DOMAIN}/success`,
+      cancel_url: `${env.parsed.DOMAIN}/cancel`,
       payment_method_types: ["card"],
       line_items: lineItems
     },
@@ -42,15 +41,14 @@ app.post("/create-session", async (req, res) => {
 
 // Stripe will redirect here if the payment succeeds
 app.get("/success", async (req, res) => {
-  console.log("req", req.query);
-  const path = resolve("../../client/success.html");
+  const path = resolve("./client/success.html");
   res.sendFile(path);
 });
 
 // Stripe will redirect here if the user cancels
 app.get("/cancel", async (req, res) => {
   // Handle user navigating away from your Checkout page
-  const path = resolve("../../client/error.html");
+  const path = resolve("./client/error.html");
   res.sendFile(path);
 });
 
