@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>Stripe Payments Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <link rel="icon" type="image/png" sizes="104x80" href="/images/logo.png" />
+  </head>
+
+  <body>
+    <div id="main" class="checkout success">
+      <div id="confirmation">
+        <div class="status success">
+          <h1>Thanks for your order!</h1>
+          <p>Woot! You successfully made a payment with Stripe.</p>
+          <p class="note">
+            We just sent your receipt to your email address, and your items will
+            be on their way shortly.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Stripe.js v3 for Elements -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- Library to render QR codes -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <!-- App -->
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Payment page with Checkout</title>
+    <link
+      rel="stylesheet"
+      href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
+    />
+    <link
+      rel="stylesheet"
+      href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css"
+    />
+    <link
+      rel="stylesheet"
+      href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+  </head>
+
+  <body>
+    <section id="opening-page">
+      <h1>Rocket Ride</h1>
+      <p>
+        Have a private pilot pick you up on a rocket and get you to where you
+        need to be.
+      </p>
+      <button id="start-ride-btn">Start Ride</button>
+    </section>
+    <section id="in-flight">
+      <img src="https://cdn.glitch.com/b2125131-ffff-4d73-a4ce-1446b6a5840e%2Frocketship.svg?1553039683911" alt="rocketship!" id="rocket" />
+      <h3>
+        Taking off!
+      </h3>
+    </section>
+    <section id="payment-page">
+      <h3>
+        Thank you for your ride! Please make a payment of $22.15
+        <div id="payment-form"></div>
+      </h3>
+    </section>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="/client.js"></script>
+  </body>
+</html>
