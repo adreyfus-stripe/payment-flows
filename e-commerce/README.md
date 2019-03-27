@@ -1,4 +1,4 @@
-# E-commerce
+# 🛍 E-commerce
 
 [wip] Due to the nature of the Internet, e-commerce companies can quickly scale to a global audience. Here we have an example online (but sadly fake) store for Stripe merchandise. 
 
