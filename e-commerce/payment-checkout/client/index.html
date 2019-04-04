@@ -1,16 +1,21 @@
 <html>
   <head>
-    <title>Stripe Payments Demo</title>
+    <title>Stripe Checkout</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" href="./styles.css" />
-    <link rel="icon" type="image/png" sizes="104x80" href="/images/logo.png" />
+    <link rel="icon" type="image/png" sizes="104x80" href="./images/logo.png" />
   </head>
 
   <body>
     <div id="summary">
       <header>
-        <h1>Order Summary</h1>
+        <h1>
+          <img
+            src="./images/logo.svg"
+            alt="Store logo of a smiling shopping bag"
+          />Stripe Press Shop Order
+        </h1>
       </header>
       <div id="order-items">
         <div class="line-item">
@@ -21,15 +26,6 @@
           </div>
           <p class="count">2 x €7.99</p>
           <p class="price">€15.98</p>
-        </div>
-        <div class="line-item">
-          <img class="image" src="./images/shirt.png" />
-          <div class="label">
-            <p class="product">Stripe Shirt</p>
-            <p class="sku">Small Standard Woman</p>
-          </div>
-          <p class="count">1 x €9.99</p>
-          <p class="price">€9.99</p>
         </div>
         <div class="line-item">
           <img class="image" src="./images/increment.png" />
@@ -44,7 +40,7 @@
       <div id="order-total">
         <div class="line-item subtotal">
           <p class="label">Subtotal</p>
-          <p class="price" data-subtotal>€29.96</p>
+          <p class="price" data-subtotal>€19.97</p>
         </div>
         <div class="line-item shipping">
           <p class="label">Shipping</p>
@@ -52,7 +48,7 @@
         </div>
         <div class="line-item total">
           <p class="label">Total</p>
-          <p class="price" data-total>€29.96</p>
+          <p class="price" data-total>€19.97</p>
         </div>
         <div class="pay-section">
           <button id="pay-btn">Pay</button>
@@ -61,8 +57,8 @@
           <div id="demo">
             <p class="label">Demo in test mode</p>
             <p class="note">
-              You can copy and paste the following test cards to trigger
-              different scenarios:
+              You can use the following fake test cards numbers with any CVC and
+              expiration date to trigger different payments scenarios:
             </p>
             <table class="note">
               <tr>

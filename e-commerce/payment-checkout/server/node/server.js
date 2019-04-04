@@ -7,6 +7,9 @@ const env = require("dotenv").config({ path: envPath });
 const stripe = require("stripe")(env.parsed.STRIPE_SECRET_KEY);
 
 app.use(express.static("./client"));
+
+// Grants access to the raw request body to use for webhook signing
+// Learn more https://stripe.com/docs/webhooks/signatures
 app.use(
   express.json({
     verify: function(req, res, buf) {
@@ -17,22 +20,27 @@ app.use(
   })
 );
 
-// Deliver checkout page
+// Render the checkout page
 app.get("/", function(request, response) {
   const path = resolve("./client/index.html");
   response.sendFile(path);
 });
 
+// Create a Checkout Session that is used to render the Stripe-hosted payment page
 app.post("/create-session", async (req, res) => {
+  // Line items will be displayed in the payment page
+  // List of { quantity: 2, amount: 799, name: "Stripe pins", currency: "eur" }
   const { lineItems } = req.body;
+
   const session = await stripe.checkout.sessions.create(
-    // What does cancel url mean?
-    // Can we have metadata here?
     {
       success_url: `${env.parsed.DOMAIN}/success`,
       cancel_url: `${env.parsed.DOMAIN}/cancel`,
       payment_method_types: ["card"],
-      line_items: lineItems
+      line_items: lineItems,
+      payment_intent_data: {
+        capture_method: "manual"
+      }
     },
     { stripe_version: "2018-11-08; checkout_sessions_beta=v1" }
   );
@@ -72,14 +80,14 @@ app.post("/webhook", async (req, res) => {
     eventType = event.type;
   } else {
     // Webhook signing is recommended, but if the secret is not configured in `config.js`,
-    // retrieve the event data directly from the request body.
+    // we can retrieve the event data directly from the request body.
     data = req.body.data;
     eventType = req.body.type;
   }
 
   if (eventType === "checkout.session.completed") {
-    console.log("💰Your user paid!");
-    // Fulfill any orders or e-mail receipts 
+    console.log("💰Your user provided payment details!");
+    // Fulfill any orders or e-mail receipts
     res.sendStatus(200);
   }
 });

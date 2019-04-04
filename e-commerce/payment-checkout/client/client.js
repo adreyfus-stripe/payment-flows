@@ -10,7 +10,6 @@ fetch("/create-session", {
   body: JSON.stringify({
     lineItems: [
       { quantity: 2, amount: 799, name: "Stripe pins", currency: "eur" },
-      { quantity: 1, amount: 999, name: "Stripe Shirt", currency: "eur" },
       { quantity: 1, amount: 399, name: "Increment Magazine", currency: "eur" }
     ]
   })
