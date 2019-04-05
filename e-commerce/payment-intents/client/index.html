@@ -1,0 +1,177 @@
+<html>
+  <head>
+    <title>Stripe Payment Intents</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <link rel="stylesheet" type="text/css" href="./prism.css" />
+    <link rel="icon" type="image/png" sizes="104x80" href="./images/logo.png" />
+  </head>
+
+  <body>
+    <div id="configure">
+      <div class="container">
+        <header><h1>1. Create PaymentIntent</h1></header>
+        <p>
+          You need to
+          <a href="https://stripe.com/docs/api">create a PaymentIntent</a>
+          before sending the user to your payment flow. There are three key
+          parameters that can affect the type of payment flow.
+        </p>
+        <select>
+          <option>Use webhooks to fulfill orders</option>
+          <option>Mobile application</option>
+          <option>Put a hold on a card</option>
+        </select>
+        <main id="config-options">
+          <fieldset>
+            <legend>Authentication UI</legend>
+            <label>
+              <input
+                type="radio"
+                name="authMethod"
+                value="use_stripe_sdk"
+                checked
+              />
+              Use Stripe SDK
+            </label>
+            <label>
+              <input type="radio" name="authMethod" value="redirect" />
+              Redirect to new page
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>Confirmation method</legend>
+            <label>
+              <input
+                type="radio"
+                name="confirmationMethod"
+                value="automatic"
+                checked
+              />
+              Automatic
+            </label>
+            <label>
+              <input type="radio" name="confirmationMethod" value="manual" />
+              Manual
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>Capture method</legend>
+            <label>
+              <input
+                type="radio"
+                name="captureMethod"
+                value="automatic"
+                checked
+              />
+              Automatic
+            </label>
+            <label>
+              <input type="radio" name="captureMethod" value="manual" />
+              Manual
+            </label>
+          </fieldset>
+          <button id="create-pi-btn">Create new PaymentIntent</button>
+        </main>
+      </div>
+      <div class="container" id="result">
+        <header><h1>Payment Intent JSON</h1></header>
+        
+        <pre><code class="language-json" id="pi-preview">
+          Create a Payment Intent to see the object preview here
+        </code></pre>
+      </div>
+    </div>
+
+    <div id="summary" class="container">
+      <header>
+        <h1>
+          2. Display a payment form
+        </h1>
+      </header>
+      <div id="order-items">
+        <div class="line-item">
+          <img class="image" src="./images/pins.png" />
+          <div class="label">
+            <p class="product">Stripe Pins</p>
+            <p class="sku">Collector Set</p>
+          </div>
+          <p class="count">2 x €7.99</p>
+          <p class="price">€15.98</p>
+        </div>
+        <div class="line-item">
+          <img class="image" src="./images/increment.png" />
+          <div class="label">
+            <p class="product">Increment Magazine</p>
+            <p class="sku">Issue #3 “Development”</p>
+          </div>
+          <p class="count">1 x €3.99</p>
+          <p class="price">€3.99</p>
+        </div>
+      </div>
+      <div id="order-total">
+        <div class="line-item subtotal">
+          <p class="label">Subtotal</p>
+          <p class="price" data-subtotal>€19.97</p>
+        </div>
+        <div class="line-item shipping">
+          <p class="label">Shipping</p>
+          <p class="price">Free</p>
+        </div>
+        <div class="line-item total">
+          <p class="label">Total</p>
+          <p class="price" data-total>€19.97</p>
+        </div>
+        <div class="pay-section">
+          <div id="card-element"></div>
+          <button id="pay-btn">Pay</button>
+        </div>
+        <div class="line-item demo">
+          <div id="demo">
+            <p class="label">Demo in test mode</p>
+            <p class="note">
+              You can use the following fake test cards numbers with any CVC and
+              expiration date to trigger different payments scenarios:
+            </p>
+            <table class="note">
+              <tr>
+                <td>Default US card:</td>
+                <td class="card-number">
+                  4242<span></span>4242<span></span>4242<span></span>4242
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a
+                    href="https://stripe.com/guides/strong-customer-authentication"
+                    target="_blank"
+                    >3D Secure auth</a
+                  >
+                  required:
+                </td>
+                <td class="card-number">
+                  4000<span></span>0000<span></span>0000<span></span>3063
+                </td>
+              </tr>
+            </table>
+
+            <p class="note">
+              See the
+              <a href="https://stripe.com/docs/testing#cards" target="_blank"
+                >docs</a
+              >
+              for a full list of test cards. Non-card payments will redirect to
+              test pages.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Stripe.js v3 for Elements -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- App -->
+    <script src="/prism.js"></script>
+    <script src="/client.js"></script>
+  </body>
+</html>

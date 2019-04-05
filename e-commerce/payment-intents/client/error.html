@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Stripe Payment Intents - Canceled</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <link rel="icon" type="image/png" sizes="104x80" href="/images/logo.png" />
+  </head>
+
+  <body>
+    <div id="main" class="checkout error">
+      <div id="confirmation">
+        <div class="status error">
+          <h1>Oops, payment canceled.</h1>
+          <p>
+            It looks like you left the payment page, please
+            <a href="/">return to checkout</a> to complete your order.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Stripe.js v3 for Elements -->
+    <script src="https://js.stripe.com/v3/"></script>
+  </body>
+</html>
