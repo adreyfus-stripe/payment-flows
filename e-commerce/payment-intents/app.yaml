@@ -1,4 +1,4 @@
-service: e-commerce-checkout
+service: e-commerce-payment-intents
 runtime: nodejs10
 instance_class: F2
 
