@@ -22,8 +22,10 @@ app.post("/create-payment-intent", async (req, res) => {
     amount: amount,
     currency: currency
   });
+
   res.send({
-    paymentIntent
+    clientSecret: paymentIntent.client_secret,
+    redirectDomain: env.parsed.REDIRECT_DOMAIN
   });
 });
 

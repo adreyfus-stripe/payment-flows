@@ -41,7 +41,8 @@ cardCvc.mount("#card-cvc");
 
 var config = {
   authenticationMethod: "use_stripe_sdk", // whether to use redirect or modal
-  clientSecret: "" // stores the PaymentIntent client_secret created on the server
+  clientSecret: "", // stores the PaymentIntent client_secret created on the server
+  redirectDomain: ""
 };
 
 /*
@@ -77,7 +78,7 @@ var triggerRedirect = function() {
   toggleSpinner(true);
   stripe
     .confirmPaymentIntent(config.clientSecret, cardNumber, {
-      return_url: "http://3f57ece6.ngrok.io"
+      return_url: config.redirectDomain
     })
     .then(function(result) {
       toggleSpinner(false);
@@ -147,7 +148,8 @@ var createPaymentIntent = function() {
     })
     .then(function(data) {
       // Store a reference to the client_secret
-      config.clientSecret = data.paymentIntent.client_secret;
+      config.clientSecret = data.clientSecret;
+      config.redirectDomain = data.redirectDomain;
     });
 };
 
