@@ -9,3 +9,6 @@ end
 
 class Account < Sequel::Model
 end
+
+class Usage < Sequel::Model(:usage)
+end
