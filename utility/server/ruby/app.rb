@@ -133,8 +133,20 @@ post '/generate_usage' do
 end
 
 get '/usage/:account_id' do
-  usage = Usage.where(account_id: params['account_id'], date: DateTime.now.to_date).max(:quantity)
-  puts usage
+  account = Account[params['account_id']]
+  user = User[account.user_id]
+
+  invoice = Stripe::Invoice.upcoming(
+    :customer => user.stripe_customer_id,
+    :subscription => account.stripe_subscription_id
+  )
+
+  status 200
+  content_type 'application/json'
+  {
+    amount: invoice['amount_due'],
+    currency: invoice['currency']
+  }.to_json
 end
 
 post '/invoice_incoming' do
