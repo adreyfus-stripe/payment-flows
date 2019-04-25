@@ -1,0 +1,31 @@
+{
+  "//1": "describes your app and its dependencies",
+  "//2": "https://docs.npmjs.com/files/package.json",
+  "//3": "updating this file will download and update your packages",
+  "name": "rocket-fuel",
+  "version": "0.0.1",
+  "description": "A simple Node app with SQLite as a database management system, implementing Stripe for unitility businesses.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/node/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "stripe": "^6.28.0",
+    "sqlite3": "^4.0.0"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "repository": {
+    "url": "https://github.com/adreyfus-stripe/payment-flows/utility"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "stripe",
+    "utility",
+    "metered billing"
+  ]
+}
