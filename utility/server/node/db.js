@@ -18,7 +18,8 @@ const init = _ => {
           email TEXT,
           first_name TEXT,
           last_name TEXT,
-          stripe_customer_id TEXT
+          stripe_customer_id TEXT,
+          password BLOB
           )`
       );
       console.log('New table users created!');
@@ -39,18 +40,25 @@ const init = _ => {
 };
 
 const createUser = params => {
-  const {email, first_name, last_name, stripe_customer_id} = params;
+  const {email, first_name, last_name, stripe_customer_id, password} = params;
   return new Promise((resolve, reject) => {
     db.run(
       `INSERT INTO users 
-        (email, first_name, last_name, stripe_customer_id) 
+        (email, first_name, last_name, stripe_customer_id, password) 
       VALUES 
-        ('${email}', '${first_name}', '${last_name}', '${stripe_customer_id}')`,
-      {},
+        ('${email}', '${first_name}', '${last_name}', '${stripe_customer_id}', $password)`,
+      {
+        $password: password,
+      },
       function(err) {
         if (!err) {
-          params.id = this.lastID;
-          resolve(params);
+          resolve({
+            email,
+            first_name,
+            last_name,
+            stripe_customer_id,
+            id: this.lastID,
+          });
         } else {
           reject(err);
         }
@@ -59,7 +67,26 @@ const createUser = params => {
   });
 };
 
+const retrieveUser = async params => {
+  const {id, email} = params;
+  const filterName = id ? 'id' : 'email';
+  const filter = id ? id : email;
+  return new Promise(resolve => {
+    db.get(`SELECT * from users WHERE ${filterName} = '${filter}'`, function(
+      err,
+      user
+    ) {
+      if (err) {
+        resolve({err});
+      } else {
+        resolve({user});
+      }
+    });
+  });
+};
+
 exports.db = {
   init,
   createUser,
+  retrieveUser,
 };
