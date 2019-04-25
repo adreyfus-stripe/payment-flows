@@ -53,7 +53,8 @@ section {
   margin-bottom: 20px;
 }
 
-#card-form {
+#card-form,
+#usage-button {
   display: none;
 }
 

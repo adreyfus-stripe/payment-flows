@@ -1,5 +1,6 @@
 (async () => {
   let user;
+  let account;
 
   const stripe = Stripe('pk_test_SGCBD9tHCwzRbldi530fjAa300GKHEPKAl');
 
@@ -28,7 +29,7 @@
     cardForm.style.display = 'block';
   });
 
-  cardForm.addEventListener('click', async ev => {
+  cardForm.addEventListener('click', async event => {
     event.preventDefault();
     const {paymentMethod, error} = await stripe.createPaymentMethod(
       'card',
@@ -41,7 +42,7 @@
       // Show error in payment form
     } else {
       // Send paymentMethod.id to your server (see Step 2)
-      const response = await fetch('/account', {
+      account = await fetch('/account', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -50,9 +51,23 @@
         }),
       }).then(res => res.json());
 
-      console.log(response);
+      cardForm.style.display = 'none';
+      document.getElementById('usage-button').style.display = 'block';
     }
   });
+
+  // Generate usage.
+  document
+    .getElementById('usage-button')
+    .addEventListener('click', async () => {
+      document.getElementById('usage-button').toggleAttribute('disabled');
+      await fetch('/generate_usage', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+      });
+      document.getElementById('usage-button').style.display = 'none';
+      await fetchUsage(account.id);
+    });
 
   async function fetchPricing() {
     // Fetch pricing details
@@ -63,5 +78,13 @@
       plan.billing_scheme
     } every ${plan.interval_count} ${plan.interval}`;
     document.querySelector('#pricing-details').textContent = pricingDetails;
+  }
+
+  async function fetchUsage(account_id) {
+    const usage = await fetch(`/usage/${account_id}`).then(res => res.json());
+    const usageDetails = `Your current usage bill is ${usage.amount / 100} ${
+      usage.currency
+    }.`;
+    document.querySelector('#pricing-details').textContent = usageDetails;
   }
 })();
