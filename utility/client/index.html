@@ -9,9 +9,6 @@
 
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/stylesheets/styles.css" />
-
-    <!-- import the webpage's client-side javascript file -->
-    <script src="/javascripts/client.js" defer></script>
   </head>
   <body>
     <header>
@@ -58,6 +55,16 @@
             </label>
           </fieldset>
           <button type="submit">Sign up</button>
+        </form>
+        <form id="card-form">
+          <h2>Card details</h2>
+          <fieldset>
+            <!-- placeholder for Elements -->
+            <div id="card-element"></div>
+          </fieldset>
+          <button type="submit">
+            Create Account
+          </button>
         </form>
       </section>
       <section id="tutorial">
@@ -113,5 +120,9 @@
         </div>
       </section>
     </main>
+    <!-- Stripe.js v3 for Elements -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/javascripts/client.js" defer></script>
   </body>
 </html>
