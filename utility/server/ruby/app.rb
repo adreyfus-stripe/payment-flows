@@ -56,7 +56,55 @@ post '/signup' do
   user.to_json
 end
 
-post '/account/user_id' do
+get '/pricing' do
+  plan = Stripe::Plan.retrieve('RFEUBasic')
+  content_type 'application/json'
+  status 200
+  plan.to_json
+end
+
+post '/account' do
+  # Here we are going to create a new account for a user
+
+  # First we retrieve the user from the Database
+  user = User[params['user_id']]
+  
+  # Make sure we found the user and then...
+  if user
+    # We attach the Payment Method for this account to the Customer in Stripe
+    # so that they can use it. 
+    payment_method = Stripe::PaymentMethod.attach(
+      params['payment_method'],
+      {
+        customer: user.stripe_customer_id,
+      }
+    )
+
+    # We then create a subscription for that customer with the Payment Method
+    # as their default Payment Method for this subscription. 
+    subscription = Stripe::Subscription.create({
+      customer: user.stripe_customer_id,
+      default_payment_method: payment_method['id'],
+      items: [
+        {
+          plan: 'RFEUBasic',
+        },
+      ]
+    })
+
+    # Finally we create an account mapping in our Database
+    account = Account.new(
+      user_id: user.id,
+      stripe_subscription_id: subscription['id']
+    )
+    account.save
+
+    # Return a response
+    content_type 'application/json'
+    status 201
+    account.to_json
+  end
+  
   # Account - new account - new Subscription
 end
 
