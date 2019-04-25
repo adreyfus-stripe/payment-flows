@@ -4,9 +4,13 @@ const {resolve} = require('path');
 const envPath = resolve('.env');
 const env = require('dotenv').config({path: envPath});
 const stripe = require('stripe')(env.parsed.STRIPE_SECRET_KEY);
+const {db} = require('./db');
 
 app.use(express.static('./client'));
 app.use(express.json());
+
+// Init the database.
+db.init();
 
 // Render the checkout page
 app.get('/', (request, response) => {
