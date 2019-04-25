@@ -10,7 +10,7 @@ module RocketFuelDB
     DB.transaction do
       # users
       DB.run(
-        "CREATE TABLE IF NOT EXISTS user (
+        "CREATE TABLE IF NOT EXISTS users (
           id INTEGER PRIMARY KEY ASC,
           email TEXT,
           first_name TEXT,
@@ -20,7 +20,7 @@ module RocketFuelDB
       )
       # accounts
       DB.run(
-        "CREATE TABLE IF NOT EXISTS account (
+        "CREATE TABLE IF NOT EXISTS accounts (
           id INTEGER PRIMARY KEY ASC,
           user_id INTEGER,
           stripe_subscription_id TEXT,
