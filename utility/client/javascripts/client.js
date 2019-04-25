@@ -13,6 +13,7 @@
     const email = signupForm.querySelector('input[name=email]').value;
     const first_name = signupForm.querySelector('input[name=first_name]').value;
     const last_name = signupForm.querySelector('input[name=last_name]').value;
+    const password = signupForm.querySelector('input[name=password]').value;
     user = await fetch('/signup', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -20,6 +21,7 @@
         email,
         first_name,
         last_name,
+        password,
       }),
     }).then(res => res.json());
   });
