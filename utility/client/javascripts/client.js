@@ -8,6 +8,7 @@
   cardElement.mount('#card-element');
 
   const signupForm = document.getElementById('signup-form');
+  const cardForm = document.getElementById('card-form');
   signupForm.addEventListener('submit', async event => {
     event.preventDefault();
     const email = signupForm.querySelector('input[name=email]').value;
@@ -22,9 +23,11 @@
         last_name,
       }),
     }).then(res => res.json());
+    signupForm.style.display = 'none';
+    fetchPricing();
+    cardForm.style.display = 'block';
   });
 
-  const cardForm = document.getElementById('card-form');
   cardForm.addEventListener('click', async ev => {
     event.preventDefault();
     const {paymentMethod, error} = await stripe.createPaymentMethod(
@@ -50,4 +53,15 @@
       console.log(response);
     }
   });
+
+  async function fetchPricing() {
+    // Fetch pricing details
+    const plan = await fetch('/pricing').then(res => res.json());
+    const pricingDetails = `${plan.usage_type} ${
+      plan.object
+    } charging ${plan.amount / 100} ${plan.currency} ${
+      plan.billing_scheme
+    } every ${plan.interval_count} ${plan.interval}`;
+    document.querySelector('#pricing-details').textContent = pricingDetails;
+  }
 })();

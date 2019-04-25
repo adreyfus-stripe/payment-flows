@@ -28,7 +28,7 @@ const init = _ => {
           id INTEGER PRIMARY KEY ASC,
           user_id INTEGER,
           stripe_subscription_id TEXT,
-          FOREIGN KEY(user_id) REFERENCES account(id) 
+          FOREIGN KEY(user_id) REFERENCES users(id)
           )`
       );
       console.log('New table accounts created!');
@@ -59,7 +59,48 @@ const createUser = params => {
   });
 };
 
+const retrieveUser = async params => {
+  const {id, email} = params;
+  const filterName = id ? 'id' : 'email';
+  const filter = id ? id : email;
+  return new Promise(resolve => {
+    db.get(`SELECT * from users WHERE ${filterName} = '${filter}'`, function(
+      err,
+      user
+    ) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(user);
+      }
+    });
+  });
+};
+
+const createAccount = async params => {
+  const {user_id, subscription_id} = params;
+  return new Promise((resolve, reject) => {
+    db.run(
+      `INSERT INTO accounts 
+        (user_id, stripe_subscription_id) 
+      VALUES 
+        ('${user_id}', '${subscription_id}')`,
+      {},
+      function(err) {
+        if (!err) {
+          params.id = this.lastID;
+          resolve(params);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 exports.db = {
   init,
   createUser,
+  retrieveUser,
+  createAccount,
 };

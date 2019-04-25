@@ -13,9 +13,14 @@ app.use(express.json());
 db.init();
 
 // Render the checkout page
-app.get('/', (request, response) => {
+app.get('/', (req, res) => {
   const path = resolve('./client/index.html');
-  response.sendFile(path);
+  res.sendFile(path);
+});
+
+app.get('/pricing', async (req, res) => {
+  const plan = await stripe.plans.retrieve('RFEUBasic');
+  res.json(plan);
 });
 
 // Signup a new users
@@ -32,6 +37,36 @@ app.post('/signup', async (req, res) => {
     stripe_customer_id: customer.id,
   });
   res.json(user);
+});
+
+// Add payment method and subscribe them to plan
+app.post('/account', async (req, res) => {
+  const {user_id, payment_method: payment_method_id} = req.body;
+  const user = await db.retrieveUser({id: user_id});
+  if (user) {
+    const payment_method = await stripe.paymentMethods.attach(
+      payment_method_id,
+      {
+        customer: user.stripe_customer_id,
+      }
+    );
+
+    const subscription = await stripe.subscriptions.create({
+      customer: user.stripe_customer_id,
+      default_payment_method: payment_method.id,
+      items: [
+        {
+          plan: 'RFEUBasic',
+        },
+      ],
+    });
+
+    const account = await db.createAccount({
+      user_id: user.id,
+      subscription_id: subscription.id,
+    });
+    res.json(account);
+  }
 });
 
 // A webhook to receive events sent from Stripe
