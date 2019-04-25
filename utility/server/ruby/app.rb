@@ -123,13 +123,18 @@ post '/account' do
   end  
 end
 
-get '/generate_usage' do
+post '/generate_usage' do
   UsageFaker.fake_usage
   status 200
   content_type 'application/json'
   return {
     status: 'success'
   }.to_json
+end
+
+get '/usage/:account_id' do
+  usage = Usage.where(account_id: params['account_id'], date: DateTime.now.to_date).max(:quantity)
+  puts usage
 end
 
 post '/invoice_incoming' do
@@ -153,7 +158,12 @@ post '/invoice_incoming' do
 
     # Do something with event
     event['data']['object']['lines']['data'].each do |line_item|
-      puts line_item
+      Stripe::InvoiceItem.update(
+        line_item['id'],
+        {
+          tax_rates: ['txr_1ET8uIBUosspf8vsSZZrsF0U']
+        }
+      )
     end
 
     status 200

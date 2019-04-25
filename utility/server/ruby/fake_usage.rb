@@ -25,10 +25,6 @@ module UsageFaker
           timestamp: DateTime.now.to_time.to_i,
           subscription_item: subscription_item,
         })
-        Stripe::Subscription.delete(subscription['id'],{
-          invoice_now: "true",
-          prorate: "false"
-        })
       end
     end
 
