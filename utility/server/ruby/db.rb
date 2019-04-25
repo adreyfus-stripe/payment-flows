@@ -23,6 +23,7 @@ module RocketFuelDB
         "CREATE TABLE IF NOT EXISTS accounts (
           id INTEGER PRIMARY KEY ASC,
           user_id INTEGER,
+          status TEXT,
           stripe_subscription_id TEXT,
           FOREIGN KEY(user_id) REFERENCES users(id) 
           )"

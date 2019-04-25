@@ -7,3 +7,8 @@ gem 'dotenv'
 gem 'sequel'
 gem 'sqlite3'
 gem 'json'
+
+group :development do
+  gem 'ruby-debug-ide'
+  gem 'debase'
+end
