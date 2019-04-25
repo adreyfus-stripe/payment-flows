@@ -24,9 +24,32 @@ module RocketFuelDB
           id INTEGER PRIMARY KEY ASC,
           user_id INTEGER,
           stripe_subscription_id TEXT,
-          FOREIGN KEY(user_id) REFERENCES account(id) 
+          FOREIGN KEY(user_id) REFERENCES users(id) 
           )"
       )
+      # usage
+      DB.run(
+        "CREATE TABLE IF NOT EXISTS usage (
+          id INTEGER PRIMARY KEY ASC,
+          account_id INTEGER,
+          quantity INTEGER,
+          date DATE,
+          FOREIGN KEY(account_id) REFERENCES accounts(id)
+        )"
+      )
+      # bills
+      DB.run("
+        CREATE TABLE IF NOT EXISTS bills (
+          id INTEGER PRIMARY KEY ASC,
+          account_id INTEGER,
+          status TEXT,
+          stripe_invoice_id INTEGER,
+          last_update_date DATE,
+          usage_id INTEGER,
+          FOREIGN KEY(account_id) REFERENCES accounts(id),
+          FOREIGN KEY(usage_id) REFERENCES usage(id)
+        )
+        ")
     end
   end
 end
