@@ -18,6 +18,22 @@ app.get('/', (request, response) => {
   response.sendFile(path);
 });
 
+// Signup a new users
+app.post('/signup', async (req, res) => {
+  const {email, first_name, last_name} = req.body;
+  const customer = await stripe.customers.create({
+    description: `Customer for ${email}`,
+    email,
+  });
+  const user = await db.createUser({
+    email,
+    first_name,
+    last_name,
+    stripe_customer_id: customer.id,
+  });
+  res.json(user);
+});
+
 // A webhook to receive events sent from Stripe
 // You can listen for specific events
 //

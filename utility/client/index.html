@@ -1,23 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Welcome!</title>
+    <title>RocketFuel</title>
     <meta name="description" content="A cool thing made with Glitch" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/stylesheets/styles.css" />
 
     <!-- import the webpage's client-side javascript file -->
-    <script src="/client.js" defer></script>
+    <script src="/javascripts/client.js" defer></script>
   </head>
   <body>
     <header>
       <h1>
-        Welcome
+        RocketFuel - A Utility Company powered by Stripe Billing
       </h1>
     </header>
+    <main id="grid">
+      <section>
+        <form id="signup-form">
+          <h2>Signup Information</h2>
+          <fieldset>
+            <label>
+              <span>First Name</span>
+              <input
+                name="first_name"
+                class="field"
+                placeholder="Jenny"
+                required
+              />
+            </label>
+            <label>
+              <span>Last Name</span>
+              <input
+                name="last_name"
+                class="field"
+                placeholder="Rosen"
+                required
+              />
+            </label>
+            <label>
+              <span>Email</span>
+              <input
+                name="email"
+                type="email"
+                class="field"
+                placeholder="jenny@example.com"
+                required
+              />
+            </label>
+            <label>
+              <span>Password</span>
+              <input name="password" type="password" class="field" required />
+            </label>
+          </fieldset>
+          <button type="submit">Sign up</button>
+        </form>
+      </section>
+      <section id="tutorial">
+        <div id="tutorial-overview">
+          <h3>Stripe Payment Intents demo</h3>
+          <p>
+            This demo uses <a href="">Elements</a> to create a credit card form
+            and the <a href="">Payment Intents API</a> to process the charge and
+            automatically prompt the customer for extra authentication when the
+            card requires it.
+          </p>
+          <p>
+            Check out the
+            <a href="https://stripe-payments-demo.appspot.com"
+              >full payments demo</a
+            >
+            with more payment methods like iDEAL and SOFORT
+          </p>
+          <h3>Settings</h3>
+          <p>
+            Toggle the authentication UI setting below to see the difference
+            between a redirect UI and pop-up modal flow.
+          </p>
+          <label>
+            Authentication UI style:
+            <select id="authentication-ui">
+              <option value="use_stripe_sdk">Pop-up modal</option>
+              <option value="redirect_to_url">Redirect to new page</option>
+            </select>
+          </label>
+        </div>
+        <div>
+          <h3>Stripe test cards</h3>
+          <div id="test-cards">
+            <div class="test-card">
+              <span>Default card:</span>
+              <div>
+                4242<span></span> 4242<span></span> 4242<span></span> 4242
+              </div>
+            </div>
+            <div class="test-card">
+              <span>3DS required:</span>
+              <div>
+                4000<span></span> 0000<span></span> 0000<span></span> 3063
+              </div>
+            </div>
+            <p>
+              Use these test card numbers with any 3 digit CVC and expiration
+              date in the future. The 3DS required card will trigger an
+              authentication flow.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>

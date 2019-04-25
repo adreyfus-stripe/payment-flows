@@ -13,7 +13,7 @@ const init = _ => {
   db.serialize(function() {
     if (!exists) {
       db.run(
-        `CREATE TABLE IF NOT EXISTS user (
+        `CREATE TABLE IF NOT EXISTS users (
           id INTEGER PRIMARY KEY ASC,
           email TEXT,
           first_name TEXT,
@@ -21,23 +21,45 @@ const init = _ => {
           stripe_customer_id TEXT
           )`
       );
-      console.log('New table user created!');
+      console.log('New table users created!');
 
       db.run(
-        `CREATE TABLE IF NOT EXISTS account (
+        `CREATE TABLE IF NOT EXISTS accounts (
           id INTEGER PRIMARY KEY ASC,
           user_id INTEGER,
           stripe_subscription_id TEXT,
           FOREIGN KEY(user_id) REFERENCES account(id) 
           )`
       );
-      console.log('New table account created!');
+      console.log('New table accounts created!');
     } else {
       console.log('Databases ready to go!');
     }
   });
 };
 
+const createUser = params => {
+  const {email, first_name, last_name, stripe_customer_id} = params;
+  return new Promise((resolve, reject) => {
+    db.run(
+      `INSERT INTO users 
+        (email, first_name, last_name, stripe_customer_id) 
+      VALUES 
+        ('${email}', '${first_name}', '${last_name}', '${stripe_customer_id}')`,
+      {},
+      function(err) {
+        if (!err) {
+          params.id = this.lastID;
+          resolve(params);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 exports.db = {
   init,
+  createUser,
 };
