@@ -45,8 +45,8 @@ const createUser = params => {
       `INSERT INTO users 
         (email, first_name, last_name, stripe_customer_id) 
       VALUES 
-        ('${email}', '${first_name}', '${last_name}', '${stripe_customer_id}')`,
-      {},
+        (?, ?, ?, ?)`,
+      [email, first_name, last_name, stripe_customer_id],
       function(err) {
         if (!err) {
           params.id = this.lastID;
@@ -62,12 +62,10 @@ const createUser = params => {
 const retrieveUser = async params => {
   const {id, email} = params;
   const filterName = id ? 'id' : 'email';
+  const query = `SELECT * from users WHERE ${filterName} = ?`;
   const filter = id ? id : email;
   return new Promise(resolve => {
-    db.get(`SELECT * from users WHERE ${filterName} = '${filter}'`, function(
-      err,
-      user
-    ) {
+    db.get(query, [filter], function(err, user) {
       if (err) {
         reject(err);
       } else {
@@ -84,8 +82,8 @@ const createAccount = async params => {
       `INSERT INTO accounts 
         (user_id, stripe_subscription_id) 
       VALUES 
-        ('${user_id}', '${subscription_id}')`,
-      {},
+        (?, ?)`,
+      [user_id, subscription_id],
       function(err) {
         if (!err) {
           params.id = this.lastID;
