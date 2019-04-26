@@ -31,12 +31,9 @@
 
   cardForm.addEventListener('click', async event => {
     event.preventDefault();
-    const {paymentMethod, error} = await stripe.createPaymentMethod(
-      'card',
-      cardElement,
-      {
-        billing_details: {name: `${user.first_name} ${user.last_name}`},
-      }
+    const {token, error} = await stripe.createToken(
+      cardElement, 
+      {name: `${user.first_name} ${user.last_name}`}
     );
     if (error) {
       // Show error in payment form
@@ -47,7 +44,7 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           user_id: user.id,
-          payment_method: paymentMethod.id,
+          token: token.id,
         }),
       }).then(res => res.json());
 
@@ -61,7 +58,7 @@
     .getElementById('usage-button')
     .addEventListener('click', async () => {
       document.getElementById('usage-button').toggleAttribute('disabled');
-      await fetch('/generate_usage', {
+      await fetch(`/generate_usage/${account.id}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
       });

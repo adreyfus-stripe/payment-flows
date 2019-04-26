@@ -4,7 +4,6 @@ require 'sinatra/cookies'
 require 'dotenv'
 require 'json'
 require_relative './models.rb'
-require_relative './fake_usage.rb'
 
 
 Dotenv.load(File.dirname(__FILE__) + '/../../.env')
@@ -89,24 +88,34 @@ post '/account' do
   if user
     # We attach the Payment Method for this account to the Customer in Stripe
     # so that they can use it. 
-    payment_method = Stripe::PaymentMethod.attach(
-      data['payment_method'],
-      {
-        customer: user.stripe_customer_id,
-      }
-    )
+    begin
 
-    # We then create a subscription for that customer with the Payment Method
-    # as their default Payment Method for this subscription. 
-    subscription = Stripe::Subscription.create({
-      customer: user.stripe_customer_id,
-      default_payment_method: payment_method['id'],
-      items: [
+      source = Stripe::Customer.create_source(
+        user.stripe_customer_id,
         {
-          plan: ENV['ROCKET_FUEL_PLAN_ID'],
-        },
-      ]
-    })
+          source: data['token']
+        }
+      )
+
+      Stripe::Customer.update(
+        user.stripe_customer_id,
+        {
+          default_source:  source.id
+        }
+      )
+
+      # We then create a subscription for that customer with the Payment Method
+      # as their default Payment Method for this subscription. 
+      subscription = Stripe::Subscription.create({
+        customer: user.stripe_customer_id,
+        default_source: source.id,
+        items: [
+          {
+            plan: ENV['ROCKET_FUEL_PLAN_ID'],
+          },
+        ]
+      })
+    end
 
     # Finally we create an account mapping in our Database
     account = Account.new(
@@ -123,8 +132,24 @@ post '/account' do
   end  
 end
 
-post '/generate_usage' do
-  UsageFaker.fake_usage
+post '/generate_usage/:account_id' do
+  begin
+    account = Account[params['account_id']]
+    usage = Usage.new(
+      account_id: account.id,
+      quantity: rand(20),
+      date: DateTime.now.to_date
+    )
+    usage.save
+    # Get the subscription item to add usage to
+    subscription = Stripe::Subscription.retrieve(account.stripe_subscription_id)
+    subscription_item = subscription['items']['data'][0]['id']
+    Stripe::UsageRecord.create({
+      quantity: usage.quantity,
+      timestamp: DateTime.now.to_time.to_i,
+      subscription_item: subscription_item,
+    })
+  end
   status 200
   content_type 'application/json'
   return {
@@ -168,16 +193,18 @@ post '/invoice_incoming' do
         return
     end
 
-    # Do something with event
-    event['data']['object']['lines']['data'].each do |line_item|
-      Stripe::InvoiceItem.update(
-        line_item['id'],
-        {
-          tax_rates: ['txr_1ET8uIBUosspf8vsSZZrsF0U']
-        }
-      )
+    # If the Invoice has just been opened, i.e its a draft, add tax to it
+    invoice = event['data']['object']
+    if invoice['status'] == 'draft'
+      invoice['lines']['data'].each do |line_item|
+        Stripe::InvoiceItem.update(
+          line_item['id'],
+          {
+            tax_rates: ['txr_1ET8uIBUosspf8vsSZZrsF0U','txr_1ETR1FBUosspf8vsyeWDypoI']
+          }
+        )
+      end
     end
 
     status 200
 end
-# Login - check user password, return user and account
