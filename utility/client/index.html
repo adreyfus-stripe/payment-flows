@@ -8,122 +8,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/stylesheets/styles.css" />
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="stylesheets/styles.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   </head>
   <body>
     <header>
       <h1>
-        RocketFuel - A Utility Company powered by Stripe Billing
+        RocketFuel
       </h1>
+      <h3>
+        A Utility Company powered by Stripe Billing
+      </h3>
     </header>
-    <main id="grid">
-      <section>
-        <form id="signup-form">
-          <h2>Signup Information</h2>
-          <fieldset>
-            <label>
-              <span>First Name</span>
-              <input
-                name="first_name"
-                class="field"
-                placeholder="Jenny"
-                required
-              />
-            </label>
-            <label>
-              <span>Last Name</span>
-              <input
-                name="last_name"
-                class="field"
-                placeholder="Rosen"
-                required
-              />
-            </label>
-            <label>
-              <span>Email</span>
-              <input
-                name="email"
-                type="email"
-                class="field"
-                placeholder="jenny@example.com"
-                required
-              />
-            </label>
-          </fieldset>
-          <button type="submit">Sign up</button>
-        </form>
-        <section>
-          <h2>Pricing</h2>
-          <span id="pricing-details"></span>
-          <button id="usage-button">Generate Usage</button>
-        </section>
-        <form id="card-form">
-          <h2>Card details</h2>
-          <fieldset>
-            <!-- placeholder for Elements -->
-            <div id="card-element"></div>
-          </fieldset>
-          <button type="submit">
-            Create Account
-          </button>
-        </form>
-      </section>
-      <section id="tutorial">
-        <div id="tutorial-overview">
-          <h3>Stripe Payment Intents demo</h3>
-          <p>
-            This demo uses <a href="">Elements</a> to create a credit card form
-            and the <a href="">Payment Intents API</a> to process the charge and
-            automatically prompt the customer for extra authentication when the
-            card requires it.
-          </p>
-          <p>
-            Check out the
-            <a href="https://stripe-payments-demo.appspot.com"
-              >full payments demo</a
-            >
-            with more payment methods like iDEAL and SOFORT
-          </p>
-          <h3>Settings</h3>
-          <p>
-            Toggle the authentication UI setting below to see the difference
-            between a redirect UI and pop-up modal flow.
-          </p>
-          <label>
-            Authentication UI style:
-            <select id="authentication-ui">
-              <option value="use_stripe_sdk">Pop-up modal</option>
-              <option value="redirect_to_url">Redirect to new page</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <h3>Stripe test cards</h3>
-          <div id="test-cards">
-            <div class="test-card">
-              <span>Default card:</span>
-              <div>
-                4242<span></span> 4242<span></span> 4242<span></span> 4242
+    <div class="container">
+      <div class="row">
+        <div class="col s8 push-s2">
+          <form id="signup-form" class="col s12">
+            <div class="section">
+              <div class="input-field col s6">
+                <input id="first_name" name="first_name" type="text" class="validate">
+                <label for="first_name">First Name</label>
+              </div>
+              <div class="input-field col s6">
+                <input id="last_name" name="last_name" type="text" class="validate">
+                <label for="last_name">Last Name</label>
+              </div>
+              <div class="input-field col s12">
+                <input id=email name="email" type="email" class="validate">
+                <label for="email">Email</label>
+              </div>
+              <div class="col s4 push-s4">
+                <button type="submit">Sign up</button>
+                <br>
               </div>
             </div>
-            <div class="test-card">
-              <span>3DS required:</span>
-              <div>
-                4000<span></span> 0000<span></span> 0000<span></span> 3063
-              </div>
+          </form>
+          <div id="pricing" class="section">
+            <div>
+              <div class="row">
+                  <div class="col s6 push-s3">
+                    <div class="card green lighten-5">
+                      <div class="card-content">
+                        <span class="card-title">Pricing</span>
+                        <p id="pricing-details"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
-            <p>
-              Use these test card numbers with any 3 digit CVC and expiration
-              date in the future. The 3DS required card will trigger an
-              authentication flow.
-            </p>
+          </div>
+          <div class="section">
+              <div class="col s4 push-s4">
+                  <button id="usage-button">Generate Usage</button>
+              </div>
+          </div> 
+          <div class="section">
+            <form id="card-form">
+              <div class="row">
+                  <h5 class="center-align">Card details</h5>
+              </div>
+              <div class="row">
+                <div class="col s8 push-s2">
+                  <div id="card-element"></div>
+                </div>
+                <br>
+                <br>
+              </div>
+              <div class="col s4 push-s4">
+                <button type="submit">
+                  Create Account
+                </button>
+              </div>
+            </form>
+          </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
     <!-- Stripe.js v3 for Elements -->
     <script src="https://js.stripe.com/v3/"></script>
     <!-- import the webpage's client-side javascript file -->
     <script src="/javascripts/client.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   </body>
 </html>

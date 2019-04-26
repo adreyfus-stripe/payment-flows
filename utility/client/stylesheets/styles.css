@@ -58,6 +58,14 @@ section {
   display: none;
 }
 
+#pricing {
+  display: none;
+}
+
+#generate_invoice {
+  display: none;
+}
+
 .checkout-item div {
   flex: 2;
   padding-left: 10px;
@@ -104,6 +112,7 @@ form {
 .stripe-element {
   padding: 10px 20px;
   box-sizing: border-box;
+  font-size: '16px';
 }
 
 #card-details {

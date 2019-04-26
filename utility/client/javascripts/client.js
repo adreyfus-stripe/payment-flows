@@ -4,12 +4,29 @@
 
   const stripe = Stripe('pk_test_SGCBD9tHCwzRbldi530fjAa300GKHEPKAl');
 
+  var style = {
+    base: {
+      color: '#32325d',
+      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': {
+        color: '#aab7c4'
+      }
+    },
+    invalid: {
+      color: '#fa755a',
+      iconColor: '#fa755a'
+    }
+  };
+
   const elements = stripe.elements();
-  const cardElement = elements.create('card');
+  const cardElement = elements.create('card', {style: style});
   cardElement.mount('#card-element');
 
   const signupForm = document.getElementById('signup-form');
   const cardForm = document.getElementById('card-form');
+  const pricingCard = document.getElementById('pricing');
   signupForm.addEventListener('submit', async event => {
     event.preventDefault();
     const email = signupForm.querySelector('input[name=email]').value;
@@ -26,6 +43,7 @@
     }).then(res => res.json());
     signupForm.style.display = 'none';
     fetchPricing();
+    pricingCard.style.display = 'block';
     cardForm.style.display = 'block';
   });
 
@@ -49,6 +67,7 @@
       }).then(res => res.json());
 
       cardForm.style.display = 'none';
+      pricingCard.style.display = 'none';
       document.getElementById('usage-button').style.display = 'block';
     }
   });
@@ -64,6 +83,7 @@
       });
       document.getElementById('usage-button').style.display = 'none';
       await fetchUsage(account.id);
+      pricingCard.style.display = 'block';
     });
 
   async function fetchPricing() {
