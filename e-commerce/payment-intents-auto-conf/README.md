@@ -1,6 +1,6 @@
-# Creating a checkout page with Stripe Elements and Payment Intents
+# Creating a form and calculating sales tax for a user
 
-This is an example of an automatic confirmation Payment Intents integration
+This is an example on how to use Payment Intents to create a custom payment page.
 
 To run: 
 
