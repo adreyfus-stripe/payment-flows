@@ -72,7 +72,7 @@ var triggerModal = function() {
 
 /*
  * Calls stripe.confirmPaymentIntent that will
- * prompt the user to enter  extra authentication details without leaving your page
+ * prompt the user to enter extra authentication details without leaving your page
  */
 var triggerRedirect = function() {
   toggleSpinner(true);
@@ -108,13 +108,13 @@ var toggleSpinner = function(spinnerOn) {
 
 /* Shows a success / error message when the payment is complete */
 var displayMessage = function(hasError) {
-  document.getElementById("payment-form").style.display = "none";
-  document.getElementById("checkout-items").style.display = "none";
-  document.getElementById("checkout-form").classList.add("done");
+  document.querySelector("#payment-form").style.display = "none";
+  document.querySelector("#checkout-items").style.display = "none";
+  document.querySelector("#checkout-form").classList.add("done");
   if (hasError) {
-    document.getElementById("error-message").style.display = "block";
+    document.querySelector("#error-message").style.display = "block";
   } else {
-    document.getElementById("success-message").style.display = "block";
+    document.querySelector("#success-message").style.display = "block";
   }
 };
 
@@ -132,7 +132,7 @@ var handleRedirectReturn = function(clientSecret) {
 /* Create a PaymentIntent with a hardcoded amount and currency */
 var createPaymentIntent = function() {
   var data = {
-    amount: 5989,
+    items: [{ id: "dream-machine" }, { id: "revolt-of-public" }],
     currency: "eur"
   };
 
@@ -150,6 +150,30 @@ var createPaymentIntent = function() {
       // Store a reference to the client_secret
       config.clientSecret = data.clientSecret;
       config.redirectDomain = data.redirectDomain;
+      config.id = data.id;
+    });
+};
+
+var calculateTax = function(postalCode) {
+  var data = {
+    items: [{ id: "dream-machine" }, { id: "revolt-of-public" }],
+    postalCode: postalCode,
+    paymentIntentId: config.id
+  };
+  return fetch("/calculate-tax", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+    .then(function(result) {
+      return result.json();
+    })
+    .then(function(data) {
+      // Update total on the frontend
+      document.querySelector(".total").textContent = `€${data.amount}`;
+      document.querySelector(".tax").textContent = `€${data.tax}`;
     });
 };
 
@@ -158,19 +182,21 @@ var createPaymentIntent = function() {
 var urlParams = new URLSearchParams(window.location.search);
 var clientSecret = urlParams.get("payment_intent_client_secret");
 
-// If we have a client secret in the URL it means that we are being redirected from 
+// If we have a client secret in the URL it means that we are being redirected from
 if (clientSecret) {
   handleRedirectReturn(clientSecret);
 } else {
   createPaymentIntent();
 }
 
-/* Update the config when a radio button is selected */
 document
-  .getElementById("authentication-ui")
-  .addEventListener("change", function(evt) {
-    config.authenticationMethod = evt.target.value;
+  .querySelector('input[name="postal-code"]')
+  .addEventListener("blur", function(evt) {
+    console.log("val", evt.target.value);
+    calculateTax(evt.target.value);
   });
+
+/* Update the config when a radio button is selected */
 
 document
   .getElementById("submit-button")

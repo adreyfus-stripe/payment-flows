@@ -8,6 +8,11 @@ const stripe = require("stripe")(env.parsed.STRIPE_SECRET_KEY);
 app.use(express.static("./client"));
 app.use(express.json());
 
+const PRICES = {
+  "revolt-of-public": 2499,
+  "dream-machine": 3490
+};
+
 // Render the checkout page
 app.get("/", (request, response) => {
   const path = resolve("./client/index.html");
@@ -16,22 +21,36 @@ app.get("/", (request, response) => {
 
 // Create a PaymentIntent to use in our checkout page
 app.post("/create-payment-intent", async (req, res) => {
-  const { amount, currency } = req.body;
-
+  const { items, currency } = req.body;
+  const initialAmount = calculateOrderAmount(items);
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: amount,
+    amount: initialAmount,
     currency: currency
   });
 
   res.send({
     clientSecret: paymentIntent.client_secret,
-    redirectDomain: env.parsed.REDIRECT_DOMAIN
+    redirectDomain: env.parsed.REDIRECT_DOMAIN,
+    id: paymentIntent.id
+  });
+});
+
+app.post("/calculate-tax", async (req, res) => {
+  const { items, postalCode, paymentIntentId } = req.body;
+  const orderAmount = calculateOrderAmount(items);
+  const tax = postalCode ? calculateTax(postalCode, orderAmount) : 0;
+  const total = orderAmount + tax;
+
+  stripe.paymentIntents.update(paymentIntentId, { amount: total });
+  res.send({
+    amount: ((orderAmount + tax) / 100).toFixed(2),
+    tax: (tax / 100).toFixed(2)
   });
 });
 
 // A webhook to receive events sent from Stripe
 // You can listen for specific events
-// 
+//
 app.post("/webhook", async (req, res) => {
   // Check if webhook signing is configured.
   if (env.parsed.STRIPE_WEBHOOK_SECRET) {
@@ -63,6 +82,15 @@ app.post("/webhook", async (req, res) => {
     res.sendStatus(200);
   }
 });
+
+const calculateTax = (postalCode, amount) => {
+  // Here you would use the postal code to calculate the right amount of tax for the purchase
+  return Math.floor(Math.random() * 500);
+};
+
+const calculateOrderAmount = items => {
+  return items.reduce((acc, item) => acc + PRICES[item.id], 0);
+};
 
 // Start server
 const listener = app.listen(process.env.PORT || 3000, function() {

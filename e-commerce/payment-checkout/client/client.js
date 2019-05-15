@@ -26,3 +26,13 @@ fetch("/create-session", {
     };
   });
 });
+
+function receiveMessage(event) {
+  console.log("received message!", event);
+
+  if (event.data === "show-steps") {
+    document.getElementById("message").textContent = "Show steps!";
+  }
+}
+
+window.addEventListener("message", receiveMessage, false);
