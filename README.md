@@ -6,8 +6,8 @@ Browse the sample businesses below to find payment flows you want to build for y
 
 |    | Business | Flows &nbsp; &nbsp; &nbsp;  |
 :---: | :--- | :--- |
-🛍 <br/> E-commerce | **One-time payment. Card not saved**.<br/> E-commerce companies use checkout forms to collect payment details and ship their product once the payment is captured. | ￭ [Redirect users to a pre-built Stripe hosted payment page](https://github.com/adreyfus-stripe/payment-flows/tree/master/e-commerce/payment-checkout) <br/> ￭ [Create a custom payment payment](https://github.com/adreyfus-stripe/payment-flows)
-🚗 <br/> Ridesharing | **Initial payment amount may change. Payment captured within 7 days of authorization.** <br/>Ridesharing is a popular model where payments are authorized before a ride begins and captured after the ride ends. | ￭ [Capture payment after a rider completes a ride](https://github.com/adreyfus-stripe/payment-flows) <br/> ￭ [Capture payment after a rider adds extra tip](https://github.com/adreyfus-stripe/payment-flows) <br/>
-👨👩 <br/>Crowdfunding | **Fixed amount. Payment captured more than 7 days after authorization.** <br/> Crowdfunding lets people contribute money towards a campaign. The funds are captured once the goal amount is reached. | ￭ [Capture payment after a campaign suceeds and reauthenticate the card.](https://github.com/adreyfus-stripe/payment-flows) <br/> ￭ [Capture payment after a campaign succeeds.](https://github.com/adreyfus-stripe/payment-flows) <br/>
+🛍 <br/> Interface examples | **Create beautiful payment experiences**.<br/> Learn about the different types of payment interfaces you could build on Stripe | ￭ [Adding sales tax to a purchase](https://github.com/adreyfus-stripe/payment-flows/tree/master/e-commerce/payment-checkout) <br/> ￭ [Create a custom payment payment](https://github.com/adreyfus-stripe/payment-flows)
+🚗 <br/> Payment Methods | **Understand how different local payment methods work** <br/> Global is different! Explore different payment methods. | ￭ [Accepting iDEAL](#) <br/> ￭ [Accepting SOFORT](#) <br/>
+👨👩 <br/>Advanced flows | **Build flexible and complex payment flows** <br/> Want to create a subscription? | ￭ [Starting a subscription with free trial.](#) <br/> ￭ [Capturing refunds](#) <br/>
  
 

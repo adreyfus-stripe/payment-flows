@@ -91,33 +91,6 @@ var triggerRedirect = function() {
     });
 };
 
-/* ------- General UI helpers ------- */
-
-/* Add a spinner in the button */
-var toggleSpinner = function(spinnerOn) {
-  var buttonText = document.getElementById("button-text"),
-    buttonSpinner = document.getElementById("button-spinner");
-  if (spinnerOn) {
-    buttonText.style.display = "none";
-    buttonSpinner.style.display = "inline-block";
-  } else {
-    buttonText.style.display = "inline-block";
-    buttonSpinner.style.display = "none";
-  }
-};
-
-/* Shows a success / error message when the payment is complete */
-var displayMessage = function(hasError) {
-  document.querySelector("#payment-form").style.display = "none";
-  document.querySelector("#checkout-items").style.display = "none";
-  document.querySelector("#checkout-form").classList.add("done");
-  if (hasError) {
-    document.querySelector("#error-message").style.display = "block";
-  } else {
-    document.querySelector("#success-message").style.display = "block";
-  }
-};
-
 /*
  * Retrieve the PaymentIntent from the client_sercret sent in the return url
  * and displays a success or error message depending on the status
@@ -176,6 +149,35 @@ var calculateTax = function(postalCode) {
       document.querySelector(".tax").textContent = `€${data.tax}`;
     });
 };
+
+
+/* ------- General UI helpers ------- */
+
+/* Add a spinner in the button */
+var toggleSpinner = function(spinnerOn) {
+  var buttonText = document.getElementById("button-text"),
+    buttonSpinner = document.getElementById("button-spinner");
+  if (spinnerOn) {
+    buttonText.style.display = "none";
+    buttonSpinner.style.display = "inline-block";
+  } else {
+    buttonText.style.display = "inline-block";
+    buttonSpinner.style.display = "none";
+  }
+};
+
+/* Shows a success / error message when the payment is complete */
+var displayMessage = function(hasError) {
+  document.querySelector("#payment-form").style.display = "none";
+  document.querySelector("#checkout-items").style.display = "none";
+  document.querySelector("#checkout-form").classList.add("done");
+  if (hasError) {
+    document.querySelector("#error-message").style.display = "block";
+  } else {
+    document.querySelector("#success-message").style.display = "block";
+  }
+};
+
 
 /* ------- Set up on page load ------- */
 
